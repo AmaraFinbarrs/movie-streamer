@@ -30,7 +30,7 @@ const App = () => {
   // Use useDebounce hook to optimize search result for better UX
   // How: Debounce the search term to prevent making too many API requests
   // by waiting for the user to stop typing for 500ms
-  useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm])
+  useDebounce(() => setDebounceSearchTerm(searchTerm), 1000, [searchTerm])
 
   const fetchMovies = async (query = '') => {
     setIsLoading(true);
