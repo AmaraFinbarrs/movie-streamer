@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useDebounce } from 'react-use';
+
 import Search from './components/Search.jsx'
 import Spinner from './components/Spinner.jsx';
 import MovieCard from './components/MovieCard.jsx';
@@ -14,10 +16,19 @@ const API_OPTIONS = {
 }
 
 const App = () => {
+  // General state
   const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Debounce related state
+  const [debounceSearchTerm, setDebounceSearchTerm] = useState('')
+
+  // Use useDebounce hook to optimize search result for better UX
+  // How: Debounce the search term to prevent making too many API requests
+  // by waiting for the user to stop typing for 500ms
+  useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm])
 
   const fetchMovies = async (query = '') => {
     setIsLoading(true);
@@ -49,8 +60,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    fetchMovies(searchTerm);
-  }, [searchTerm]);
+    fetchMovies(debounceSearchTerm);
+  }, [debounceSearchTerm]);
   
 
   return (
